@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
         // padding: 100,
     },
     row: { flex: 1, flexDirection: "row", justifyContent: 'space-around' },
-    row2: { flexDirection: "row", justifyContent: 'center' },
+    row2: { flex: 1, flexDirection: "row", justifyContent: 'center' },
     //  ==============================================================
     //  Camera
     //  ==============================================================
@@ -94,12 +94,6 @@ export const styles = StyleSheet.create({
     },
     text: {
         textAlign: "center"
-    },
-    center: {
-        // flex: 1,
-        // borderColor: 'green', borderWidth: 10,
-        alignItems: "center",
-        justifyContent: "center"
     },
     textBoxStyle: {
         color: 'white',

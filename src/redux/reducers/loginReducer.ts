@@ -1,7 +1,7 @@
 import { fetchApi } from "../fetchs/index";
 import { FetchApiOptions } from "../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../models/api/ResponseModel";
-import { showMessage, showToast } from "../reducers/globalReducer";
+import { showToast } from "../reducers/globalReducer";
 import { getUsuarioRepos } from "./usuario/usuarioReducer";
 import { getConfiguracoes } from "./configuracoesReducer";
 
@@ -131,7 +131,7 @@ function LoginReposSuccess(response: ResponseModel) {
     types.push({ type: GET_LOGIN_SUCCESS, payload: response.objeto });
 
     if (response.objeto !== null && !response.objeto.authenticated) {
-        types.push(showToast({ text: response.mensagem }));
+        types.push(showToast({ text: response.objeto.message }));
         return types;
     }
 
@@ -152,8 +152,6 @@ function LoginReposError(response: ResponseModel) {
     types.push(showToast({
         text: response.mensagem
     }))
-
-    // types.push(showMessage(response.mensagem));
 
     return types;
 }

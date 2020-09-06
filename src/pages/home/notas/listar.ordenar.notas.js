@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Icon, Text, List, ListItem, Left, Right, Body } from "native-base";
-import { ModalView } from "../../components/modal";
+import { ModalView } from "../../../components/modal";
 
 //  Redux
 import { connect } from "react-redux";

@@ -1,9 +1,9 @@
 import React, { Component, useState } from "react";
 import { Button, Icon, Text, DatePicker, Grid, Row, Col, Radio, List, ListItem, Switch, Left, Right, Body } from "native-base";
-import { styles } from "../../styles/layouts/layouts.styles";
-import { DateTime } from "../../helpers/datetime";
-import { ModalView, ModalViewConst } from "../../components/modal";
-import { ExtracaoPayload } from "../../models/payloads/ExtracaoPayload";
+import { styles } from "../../../styles/layouts/layouts.styles";
+import { DateTime } from "../../../helpers/datetime";
+import { ModalView, ModalViewConst } from "../../../components/modal";
+import { ExtracaoPayload } from "../../../models/payloads/ExtracaoPayload";
 
 const radios = [15, 30, 90, 180]
 
@@ -12,7 +12,8 @@ export class ListarFiltro extends Component {
         super(props);
         this.state = {
             show: false,
-            payload: this.props.payload,
+            // payload: this.props.payload,
+            payload: this.props.getPayload(),
             radio: radios[0],
             mudancaEstado: false
         }

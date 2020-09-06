@@ -1,7 +1,7 @@
 import { fetchApi } from "../../fetchs/index";
 import { FetchApiOptions } from "../../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../../models/api/ResponseModel";
-import { showMessage, showToast } from "../globalReducer";
+import { showToast } from "../globalReducer";
 import { extracaoModel, extracaoItemModel } from "../../../models/api/ExtracaoModel";
 import { emissorAgregadoPayload, emissorAgregadoModel } from "../../../models/api/emissorAgregadoModel";
 
@@ -27,7 +27,7 @@ export function emissorAgregadoReducer(state = { repos: defaultRepos }, action) 
 }
 
 export function emissorAgregadoRepos(payload: emissorAgregadoPayload) {
-    console.log("****************Emissor/ListarRepos****************", payload);
+    // console.log("****************Emissor/ListarRepos****************", payload);
 
     return (dispatch, getState) => {
         var options = new FetchApiOptions(

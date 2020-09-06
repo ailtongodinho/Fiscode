@@ -9,29 +9,33 @@ export const GET_LISTAR_COMPRAS_RESET = 'nfce/Compras/Listar/repos/RESET';
 export const GET_LISTAR_COMPRAS_SUCCESS = 'nfce/Compras/Listar/repos/LOAD_SUCCESS';
 export const GET_LISTAR_COMPRAS_FAIL = 'nfce/Compras/Listar/repos/LOAD_FAIL';
 
-const defaultRepos = null;
+const defaultRepos = {
+    sucesso: false,
+    lista: null,
+    selecionada: null,
+};
 
 export function listarComprasReducer(state = { repos: defaultRepos }, action) {
     switch (action.type) {
-        case GET_LISTAR_COMPRAS:
-            return { ...state, repos: action.payload };
+        // case GET_LISTAR_COMPRAS:
+        //     return { ...state, repos: { ...state.repos, lista: action.payload }};
         case GET_LISTAR_COMPRAS_SUCCESS:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, lista: action.payload } }
         case GET_LISTAR_COMPRAS_FAIL:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, sucesso: action.payload } }
         case SELECIONAR_LISTAR_COMPRAS:
-            return { ...state, selecionada: action.payload}
+            return { ...state, repos: { ...state.repos, selecionada: action.payload } }
         default:
             return state;
     }
 }
 
-export function selecionarLista(compra){
+export function selecionarLista(compra) {
     return { type: SELECIONAR_LISTAR_COMPRAS, payload: compra }
 }
 
 export function listarComprasRepos(payload) {
-    console.log("****************Compras/ListarRepos****************", payload);
+    // console.log("****************Compras/ListarRepos****************", payload);
 
     return (dispatch, getState) => {
         var options = new FetchApiOptions(
@@ -68,7 +72,7 @@ function listarComprasReposError(response: ResponseModel) {
 
     var types = [];
 
-    types.push({ type: GET_LISTAR_COMPRAS_FAIL, payload: response });
+    types.push({ type: GET_LISTAR_COMPRAS_FAIL, payload: response.sucesso });
 
     types.push(showToast({ text: response.mensagem }));
 
@@ -76,7 +80,7 @@ function listarComprasReposError(response: ResponseModel) {
 }
 
 export function listarComprasDeletar(id) {
-    console.log("****************Compras/ListarDeletar****************", id);
+    // console.log("****************Compras/ListarDeletar****************", id);
 
     return (dispatch, getState) => {
         var options = new FetchApiOptions(

@@ -24,6 +24,13 @@ import { listarComprasReducer } from "./compras/listar.comprasReducer";
 import { novoComprasReducer } from "./compras/novo.comprasReducer";
 import { comprasReducer } from "./compras/comprasReducer";
 import { produtoComprasReducer } from "./compras/produto.comprasReducer";
+//  IBGE
+import { ufIbgeReducer } from "./ibge/uf.ibge";
+import { municipioIbgeReducer } from "./ibge/municipio.ibge";
+//  Localidade
+import { localidadeEstadosReducer } from "./localidade/estados.localidadeReducer";
+import { localidadeDistritosReducer } from "./localidade/distritos.localidadeReducer";
+import { localidadeMunicipiosReducer } from "./localidade/municipios.localidadeReducer";
 
 const reducerCombined = combineReducers({
     validarReducer,
@@ -43,6 +50,11 @@ const reducerCombined = combineReducers({
     novoComprasReducer,
     listarComprasReducer,
     produtoComprasReducer,
+    ufIbgeReducer,
+    municipioIbgeReducer,
+    localidadeEstadosReducer,
+    localidadeDistritosReducer,
+    localidadeMunicipiosReducer
 });
 
 const middlewares = [thunk];

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Button, Icon, Text, List, ListItem, Body, Card, CardItem, Badge, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, SwipeRow, H1, H2, H3 } from "native-base";
-import { styles, pallet } from "../../styles/layouts/layouts.styles";
+import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import { StyleSheet } from "react-native";
-import { money } from "../../components/mask";
-import { listaVazia } from "../../components/listaVazia";
+import { money } from "../../../components/mask";
+import { listaVazia } from "../../../components/listaVazia";
 
 export class Pagamento extends Component {
     constructor(props) {

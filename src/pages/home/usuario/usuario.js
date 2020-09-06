@@ -3,6 +3,7 @@ import { View, Button, Icon, Text, Header, Body, Right, Content, List, ListItem,
 import Background from "../../../components/backgroud";
 import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import { StyleSheet } from "react-native";
+import { appsettings } from "../../../appsettings";
 //  Redux
 import { connect } from "react-redux";
 import { setAuthenticated } from "../../../redux/reducers/loginReducer";
@@ -20,16 +21,21 @@ class Usuario extends Component {
     state = {
         confirmarLogout: false
     }
+    navegarAlterar = () => {
+        this.props.navigation.navigate("Autorizar", { to: 'AlterarUsuario' })
+        // this.props.navigation.navigate("AlterarUsuario")
+    }
     logout = () => {
         this.props.setAuthenticated(false)
     }
     render() {
 
-        // console.log("RENDER", this.props.sexoPicker);
+        console.log("RENDER", this.props.usuario);
 
-        if(this.props.usuario === undefined) return null;
+        if (this.props.usuario === undefined) return null;
 
-        const sexo = this.props.sexoPicker.filter(x => x.valor == this.props.usuario.sexo)[0];
+        // const sexo = this.props.sexoPicker.filter(x => x.valor == this.props.usuario.sexo)[0];
+        const sexo = appsettings.usuario.tiposSexo.filter(x => x.value == this.props.usuario.sexo)[0]
 
         return (
             <Background
@@ -72,7 +78,7 @@ class Usuario extends Component {
                             <Right>
                                 <Button block full icon
                                     style={[styles.startRadius, styles.endRadius]}
-                                // onPress={() => this.setState({ confirmarLogout: true })}
+                                    onPress={this.navegarAlterar}
                                 >
                                     <Icon name="create" style={styles.textBoxStyle} />
                                 </Button>
@@ -84,12 +90,12 @@ class Usuario extends Component {
                                 <Text style={[usuarioStyle.textoCor, usuarioStyle.textoValor]}>{this.props.usuario.nome} {this.props.usuario.sobrenome}</Text>
                             </Body>
                         </ListItem>
-                        <ListItem>
+                        {/* <ListItem>
                             <Body>
                                 <Text style={[usuarioStyle.textoCor]} note>CPF/CNPJ</Text>
                                 <Text style={[usuarioStyle.textoCor, usuarioStyle.textoValor]}>{maskCpfCnpj(this.props.usuario.registroNacional).masked}</Text>
                             </Body>
-                        </ListItem>
+                        </ListItem> */}
                         <ListItem>
                             <Body>
                                 <Text style={[usuarioStyle.textoCor]} note>E-Mail</Text>
@@ -100,7 +106,7 @@ class Usuario extends Component {
                             <Body>
                                 <Text style={[usuarioStyle.textoCor]} note>Sexo</Text>
                                 {/* <Input value={this.props.usuario.sexo} /> */}
-                                <Text style={[usuarioStyle.textoCor, usuarioStyle.textoValor]}>{sexo.texto}</Text>
+                                <Text style={[usuarioStyle.textoCor, usuarioStyle.textoValor]}>{sexo.label}</Text>
                             </Body>
                         </ListItem>
                         <ListItem itemHeader>

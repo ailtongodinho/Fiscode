@@ -36,7 +36,7 @@ class ListarCompras extends Component {
         var obj = []
         if (this.props.compras !== null && this.props.compras !== undefined && this.props.compras.length > 0) {
             this.props.compras.forEach((item) => {
-                
+
                 const key = item.id;
                 obj.push(
                     <ListItem key={key + "_LISTITEM"} onPress={() => this._navegarCompras(item.id)}>
@@ -46,14 +46,17 @@ class ListarCompras extends Component {
                                 <Text>{item.nome}</Text>
                                 <Text note>{DateTime.formatDate(new Date(item.dataCriacao), 'dd/MM/yyyy HH:mm:ss')}</Text>
                             </Body>
-                            <Text>{money(item.total).masked}</Text>
+                            {/* <Text>{money(item.total).masked}</Text> */}
+                            {item.uf != null ?
+                                <Text note>{item.municipio}, {item.uf}</Text>
+                            : null}
                         </Left>
-                    </ListItem>
+                    </ListItem >
                 )
             })
         }
         else {
-            obj.push(listaVazia('Sem listas por aqui ...', <Button transparent bordered rounded onPress={() => this.props.listarComprasRepos()}><Icon name={"refresh"}/></Button>))
+            obj.push(listaVazia('Sem listas por aqui ...', <Button transparent bordered rounded onPress={() => this.props.listarComprasRepos()}><Icon name={"refresh"} /></Button>))
         }
         return obj;
     }
@@ -106,7 +109,7 @@ const listarStyle = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        compras: state.listarComprasReducer.repos
+        compras: state.listarComprasReducer.repos.lista
     };
 };
 

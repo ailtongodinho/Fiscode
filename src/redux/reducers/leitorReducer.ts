@@ -7,6 +7,8 @@ import { ReactReduxContext } from "react-redux";
 import { listarNotasRepos } from "./nota/notaListarReducer";
 
 const GET_LEITOR = 'nfce/leitor/repos/LOAD';
+const SET_IMAGEM_LEITOR = 'nfce/leitor/repos/SET_IMAGEM';
+const SET_URL_LEITOR = 'nfce/leitor/repos/SET_URL';
 const GET_LEITOR_RESET = 'nfce/leitor/repos/LOAD_RESET';
 const GET_LEITOR_SUCCESS = 'nfce/leitor/repos/LOAD_SUCCESS';
 const GET_LEITOR_FAIL = 'nfce/leitor/repos/LOAD_FAIL';
@@ -15,7 +17,11 @@ const defaultRepos = {
     mensagem: "Leitor do nota",
     emissao: new Date(),
     sucesso: false,
-    idNota: null
+    idNota: null,
+    imagem: null,
+    conteudoImagem: null,
+    hostKey: null,
+    url: null
 }
 
 export function leitorReducer(state = { repos: defaultRepos }, action) {
@@ -26,12 +32,24 @@ export function leitorReducer(state = { repos: defaultRepos }, action) {
         case GET_LEITOR_RESET:
             return { ...state, repos: defaultRepos }
         case GET_LEITOR_SUCCESS:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, ...action.payload } };
         case GET_LEITOR_FAIL:
-            return { ...state, repos: { ...state.repos, ...action.payload }};
+            return { ...state, repos: { ...state.repos, ...action.payload } };
+        case SET_IMAGEM_LEITOR:
+            return { ...state, repos: { ...state.repos, conteudoImagem: action.payload } };
+        case SET_URL_LEITOR:
+            return { ...state, repos: { ...state.repos, url: action.payload } };
         default:
             return state;
     }
+}
+
+export function setConteudoImagem(conteudo: string) {
+    return { type: SET_IMAGEM_LEITOR, payload: conteudo }
+}
+
+export function setUrl(conteudo: string) {
+    return { type: SET_URL_LEITOR, payload: conteudo }
 }
 
 export function extrairNotaReset() {
@@ -39,16 +57,21 @@ export function extrairNotaReset() {
 }
 
 export function extrairNotaRepos(payload: extrairModel) {
-    console.log("*******************************extrairNotaRepos", payload);
+    // console.log("*******************************extrairNotaRepos", payload);
 
 
     return (dispatch, getState) => {
+
+        if (payload?.url != null) dispatch(setUrl(payload.url));
+
         var options = new FetchApiOptions(
             GET_LEITOR,
             '/Extracao/Extrair',
             'POST',
             {
-                url: payload.url
+                url: getState().leitorReducer.repos.url,
+                imagem: getState().leitorReducer.repos.conteudoImagem,
+                HostKey: getState().leitorReducer.repos.hostKey,
             },
             new Headers({
                 "Authorization": "Bearer " + getState().loginReducer.repos.objeto?.accessToken
@@ -74,7 +97,9 @@ function LeitorReposSuccess(response: ResponseModel) {
             sucesso: true,
             emissao: response.objeto.emissao,
             mensagem: response.objeto.mensagem,
-            idNota: response.objeto.idNota
+            idNota: response.objeto.idNota,
+            imagem: response.objeto.imagem,
+            hostKey: response.objeto.hostKey
         }
     });
 

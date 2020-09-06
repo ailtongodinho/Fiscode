@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { KeyboardAvoidingView, StatusBar } from "react-native";
+import { KeyboardAvoidingView, StatusBar, Keyboard } from "react-native";
 import { styles, pallet } from "../styles/layouts/layouts.styles";
 import { Container } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 //  Redux
 import { connect } from "react-redux";
 import { updateStatusBar } from "../redux/reducers/globalReducer";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 class Background extends Component {
     constructor(props) {
@@ -23,20 +24,22 @@ class Background extends Component {
 
         // console.log("Background", bgColor)
         return (
-            <SafeAreaView
+            <KeyboardAvoidingView
                 style={[{ flex: 1 }]}
+                behavior={Platform.OS === "ios" ? "padding" : null}
             >
-                <KeyboardAvoidingView
-                style={[{ flex: 1 }]}
-                // behavior="height"
+                <SafeAreaView
+                    style={[{ flex: 1 }]}
                 >
-                    <Container
-                        style={[styles.container, { backgroundColor: bgColor }]}
-                    >
-                        {this.props.children}
-                    </Container>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
+                    {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+                        <Container
+                            style={[styles.container, { backgroundColor: bgColor }]}
+                        >
+                            {this.props.children}
+                        </Container>
+                    {/* </TouchableWithoutFeedback> */}
+                </SafeAreaView>
+            </KeyboardAvoidingView>
         )
     }
 }

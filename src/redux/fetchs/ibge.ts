@@ -4,9 +4,9 @@ import { FetchApiOptions } from "../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../models/api/ResponseModel";
 import { appsettings } from "../../appsettings";
 
-export function fetchApi(options: FetchApiOptions, dispatch: Function, onSuccess: Function, onError: Function, showLoading: boolean = true) {
+export function ibgeApi(options: FetchApiOptions, dispatch: Function, onSuccess: Function, onError: Function, showLoading: boolean = true) {
     //  Distrinbuindo appsettings
-    const { baseURL, headers, defaultNetworkErrorResponse } = appsettings.api
+    const { baseURL, headers, defaultNetworkErrorResponse } = appsettings.ibgeApi
     //  Criando URL
     var url = baseURL + options.Url;
     //  Criando Header
@@ -27,17 +27,9 @@ export function fetchApi(options: FetchApiOptions, dispatch: Function, onSuccess
     //  Chama a API
     return fetch(url, newOptions)
         .then(x => {
-            if (x.status == 401) {
-                dispatch(setAuthenticated(false));
-                throw new ResponseModel(false, x.status, "Sua Sessão foi expirada", new Date(), null);
-            }
             return x.json();
         })
         .then(response => {
-            //  Valida se há variavel de ModelValidate
-            if (response.hasOwnProperty("errors") || !response.sucesso) {
-                throw response;
-            }
             types = onSuccess(response);
         })
         .catch(error => {

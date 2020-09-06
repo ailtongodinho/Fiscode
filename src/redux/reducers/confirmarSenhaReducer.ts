@@ -1,7 +1,7 @@
 import { fetchApi } from "../fetchs/index";
 import { FetchApiOptions } from "../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../models/api/ResponseModel";
-import { showMessage } from "../reducers/globalReducer";
+import { showToast } from "../reducers/globalReducer";
 
 export const GET_CONFIRMAR_SENHA = 'nfce/ConfirmarSenha/repos/LOAD';
 export const GET_CONFIRMAR_SENHA_RESET = 'nfce/ConfirmarSenha/repos/RESET';
@@ -65,7 +65,7 @@ function ConfirmarSenhaReposSuccess(response: ResponseModel) {
     types.push({ type: GET_CONFIRMAR_SENHA_SUCCESS, payload: response });
 
     if (response.objeto !== null && !response.objeto.authenticated) {
-        types.push(showMessage(response.mensagem));
+        types.push(showToast({ text: response.mensagem }));
     }
 
     return types;
@@ -78,7 +78,7 @@ function ConfirmarSenhaReposError(response: ResponseModel) {
 
     types.push({ type: GET_CONFIRMAR_SENHA_FAIL, payload: response });
 
-    types.push(showMessage(response.mensagem));
+    types.push(showToast({ text: response.mensagem }));
 
     return types;
 }

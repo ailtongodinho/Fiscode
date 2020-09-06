@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import { StyleSheet, Clipboard, AsyncStorage } from "react-native";
 import { Button, Icon, Text, Content, View, Card, CardItem, Body, Fab, Right, List, ListItem, Input, Left } from "native-base";
-import Background from "../../components/backgroud";
-import { styles, pallet } from "../../styles/layouts/layouts.styles";
+import Background from "../../../components/backgroud";
+import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import * as Permissions from "expo-permissions";
 import { Camera } from "expo-camera";
 
 //  Redux
 import { connect } from "react-redux";
-import { extrairNotaRepos } from "../../redux/reducers/leitorReducer";
-import { adicionarNota } from "../../redux/reducers/nota/notaListarReducer";
-import { copiarClipboard } from "../../redux/reducers/globalReducer";
-import { extrairModel } from "../../models/api/ExtrairModel";
+import { extrairNotaRepos } from "../../../redux/reducers/leitorReducer";
+import { adicionarNota, getNotasRepos } from "../../../redux/reducers/nota/notaListarReducer";
+import { extrairModel } from "../../../models/api/ExtrairModel";
 import { ScrollView } from "react-native-gesture-handler";
-import { DateTime } from "../../helpers/datetime";
+// import { copiarClipboard } from "../../../redux/reducers/globalReducer";
+// import { DateTime } from "../../../helpers/datetime";
+import moment from "moment/min/moment-with-locales";
 
 const storage_historico = "@store_leitor_historico";
 
@@ -60,7 +61,7 @@ class Leitor extends Component {
         var historico = JSON.parse(await AsyncStorage.getItem(storage_historico)) ?? [];
         // console.log("_lerHistorico", historico);
         if (historico.length > 0)
-            historico = historico.filter(x => x.data > DateTime.subtract(null, 30))
+            historico = historico.filter(x => x.data > moment().subtract(30, 'days'))
         this.setState({ historico: historico })
     }
     escanearHandler = ({ type, data }) => {
@@ -70,12 +71,18 @@ class Leitor extends Component {
                 this.setState({ escaneando: true });
                 this.props.extrairNotaRepos(new extrairModel(data))
                     .then(() => {
-                        var historico = this.state.historico;
-                        historico.unshift({ nota: data, sucesso: this.props.leitor.sucesso, data: Date.now(), mensagem: this.props.leitor.mensagem });
-                        // if (this.props.leitor.sucesso) {
-                        //     this.props.adicionarNota(this.props.leitor.idNota);
-                        // }
-                        setTimeout(() => this.setState({ escaneando: false, historico: historico }), 3000)
+                        if (this.props.leitor.imagem == null) {
+                            var historico = this.state.historico;
+                            historico.unshift({ sucesso: this.props.leitor.sucesso, data: moment().toDate(), mensagem: this.props.leitor.mensagem, id: this.props.leitor.idNota });
+                            // if (this.props.leitor.sucesso) {
+                            //     this.props.adicionarNota(this.props.leitor.idNota);
+                            // }
+                            this.setState({ historico: historico });
+                        }
+                        else {
+                            this.props.navigation.navigate("ConfirmarLeitor");
+                        }
+                        setTimeout(() => this.setState({ escaneando: false }), 3000)
                     });
             }
         }
@@ -167,6 +174,7 @@ class Leitor extends Component {
                         </ListItem>
 
                         {this.state.historico.map((item) => {
+                            
                             return (
                                 <ListItem>
                                     <Left style={styles.center}>
@@ -177,11 +185,15 @@ class Leitor extends Component {
                                             <Text note>{new Date(item.data).toISOString()}</Text>
                                             <Text>{item.mensagem}</Text>
                                         </Body>
-                                        <Button bordered
-                                            onPress={() => this.props.copiarClipboard(item.nota)}
-                                        >
-                                            <Icon name="link" />
-                                        </Button>
+                                        {item.sucesso && item?.id > 0 ?
+                                            <Button bordered
+                                                // onPress={() => this.props.copiarClipboard(item.nota)}
+                                                onPress={() => this.navegarNota(item.id)}
+                                            >
+                                                <Icon name="open" />
+                                            </Button>
+                                            : null
+                                        }
                                     </Left>
                                 </ListItem>
                             );
@@ -192,6 +204,15 @@ class Leitor extends Component {
 
             </View >
         )
+    }
+    navegarNota = (id) => {
+        if (id !== null || id !== undefined) {
+            this.props.getNotasRepos(id).then(() => {
+                if (this.props.sucessoNota) {
+                    this.props.navigation.navigate("Detalhes");
+                }
+            })
+        }
     }
     render() {
 
@@ -232,14 +253,16 @@ class Leitor extends Component {
 
 const mapStateToProps = state => {
     return {
-        leitor: state.leitorReducer.repos
+        leitor: state.leitorReducer.repos,
+        sucessoNota: state.ListarNotasReducer.repos.sucesso
     };
 };
 
 const mapDispatchToProps = {
     extrairNotaRepos,
     adicionarNota,
-    copiarClipboard
+    // copiarClipboard,
+    getNotasRepos
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leitor);

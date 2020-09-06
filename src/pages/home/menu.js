@@ -20,7 +20,7 @@ export class Menu extends Component {
                     padder
                 >
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Listar')}>
-                        <Card>
+                        <Card noShadow>
                             <CardItem>
                                 <Icon active name="list-box" />
                                 <Body style={[{ backgroundColor: 'transparent', padding: 10 }]}>
@@ -34,7 +34,7 @@ export class Menu extends Component {
                         </Card>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('ListarCompras')}>
-                        <Card>
+                        <Card noShadow>
                             <CardItem>
                                 <Icon active name="basket" />
                                 <Body style={[{ backgroundColor: 'transparent', padding: 10 }]}>
@@ -48,7 +48,7 @@ export class Menu extends Component {
                         </Card>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('ListarEmissores')}>
-                        <Card>
+                        <Card noShadow>
                             <CardItem>
                                 <Icon active name="business" />
                                 <Body style={[{ backgroundColor: 'transparent', padding: 10 }]}>

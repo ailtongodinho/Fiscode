@@ -9,6 +9,7 @@ const estado = (props) => {
         backgroundColor: props.hasOwnProperty('backgroundColor') ? props.backgroundColor : null,
         tituloHeader: props.hasOwnProperty('tituloHeader') ? props.tituloHeader : null,
         headerLeftIcon: props.hasOwnProperty('headerLeftIcon') ? props.headerLeftIcon : <Icon name="arrow-back" />,
+        imagem: props.hasOwnProperty('imagem') ? props.imagem : null,
         mostrarLogo: props.hasOwnProperty('mostrarLogo') ? props.mostrarLogo : true,
         logoComTexto: props.hasOwnProperty('logoComTexto') ? props.logoComTexto : true,
         titulo: props.hasOwnProperty('titulo') ? props.titulo : null,
@@ -24,6 +25,11 @@ export class Formulario extends Component {
     constructor(props) {
         super(props);
         this.state = estado(this.props)
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.key !== prevProps.key) {
+            this.setState(estado(this.props))
+        }
     }
     _confirmar = () => {
         this.state.onConfirm();
@@ -61,18 +67,24 @@ export class Formulario extends Component {
                     padder
                     contentContainerStyle={{ marginTop: this.state.tituloHeader !== null ? 0 : "20%" }}
                 >
-                    {this.state.mostrarLogo ?
-                        <View style={[styles.center]}>
-                            <Logo
-                                width={100}
-                                height={100}
-                                hasText={this.state.logoComTexto}
-                            />
+                    <View style={[styles.center]}>
+                        {this.state.imagem == null ?
+                            this.state.mostrarLogo ?
+                                <Logo
+                                    width={100}
+                                    height={100}
+                                    hasText={this.state.logoComTexto}
+                                />
+                                : null
+                            : this.state.imagem}
+                    </View>
+                    {this.state.titulo != null ?
+                        <View
+                            style={[styles.center, { marginTop: "10%" }]}
+                        >
+                            {this.state.titulo}
                         </View>
                         : null}
-                    <View style={[styles.center, { marginTop: "10%" }]}>
-                        {this.state.titulo}
-                    </View>
                     <Form
                         style={[
                             this.state.centralizar ? styles.center : {},

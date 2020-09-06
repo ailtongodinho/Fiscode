@@ -2,6 +2,7 @@ export class ResponseModel {
     sucesso: boolean;
     httpStatus: number;
     mensagem: string;
+    error: string;
     dataHora: Date;
     objeto: any;
     constructor(

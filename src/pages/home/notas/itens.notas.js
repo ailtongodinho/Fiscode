@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Button, Icon, Text, List, ListItem, Body, Card, CardItem, Badge, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, SwipeRow } from "native-base";
-import { styles, pallet } from "../../styles/layouts/layouts.styles";
-import { money } from "../../components/mask";
-import { listaVazia } from "../../components/listaVazia";
+import { styles, pallet } from "../../../styles/layouts/layouts.styles";
+import { money } from "../../../components/mask";
+import { listaVazia } from "../../../components/listaVazia";
 
 export class Itens extends Component {
     constructor(props) {

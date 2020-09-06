@@ -1,7 +1,7 @@
 import { fetchApi } from "../../fetchs/index";
 import { FetchApiOptions } from "../../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../../models/api/ResponseModel";
-import { showMessage } from "../globalReducer";
+import { showToast } from "../globalReducer";
 
 export const GET_FAVORITAR_NOTA = 'nfce/notaFavoritar/repos/LOAD';
 export const GET_FAVORITAR_NOTA_RESET = 'nfce/notaFavoritar/repos/RESET';
@@ -72,7 +72,7 @@ function notaFavoritarReposError(response: ResponseModel) {
 
     types.push({ type: GET_FAVORITAR_NOTA_FAIL, payload: response });
 
-    types.push(showMessage(response.mensagem));
+    types.push(showToast({ text: response.mensagem }));
 
     return types;
 }

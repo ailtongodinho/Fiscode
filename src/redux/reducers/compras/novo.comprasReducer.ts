@@ -10,23 +10,25 @@ export const GET_NOVO_COMPRAS_RESET = 'nfce/Compras/Nova/repos/RESET';
 export const GET_NOVO_COMPRAS_SUCCESS = 'nfce/Compras/Nova/repos/LOAD_SUCCESS';
 export const GET_NOVO_COMPRAS_FAIL = 'nfce/Compras/Nova/repos/LOAD_FAIL';
 
-const defaultRepos = null;
+const defaultRepos = {
+    sucesso: false
+};
 
 export function novoComprasReducer(state = { repos: defaultRepos }, action) {
     switch (action.type) {
-        case GET_NOVO_COMPRAS:
-            return { ...state, repos: action.payload };
+        // case GET_NOVO_COMPRAS:
+        //     return { ...state, repos: action.payload };
         case GET_NOVO_COMPRAS_SUCCESS:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, sucesso: action.payload } };
         case GET_NOVO_COMPRAS_FAIL:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, sucesso: action.payload } };
         default:
             return state;
     }
 }
 
 export function novoComprasRepos(payload: comprasModel) {
-    console.log("****************Compras/ListarRepos****************", payload);
+    // console.log("****************Compras/ListarRepos****************", payload);
 
     return (dispatch, getState) => {
         var options = new FetchApiOptions(
@@ -53,7 +55,7 @@ function novoComprasReposSuccess(response: ResponseModel) {
 
     var types = [];
 
-    types.push({ type: GET_NOVO_COMPRAS_SUCCESS, payload: response.objeto });
+    types.push({ type: GET_NOVO_COMPRAS_SUCCESS, payload: response.sucesso });
 
     types.push(listarComprasRepos({}))
 
@@ -65,7 +67,7 @@ function novoComprasReposError(response: ResponseModel) {
 
     var types = [];
 
-    types.push({ type: GET_NOVO_COMPRAS_FAIL, payload: response });
+    types.push({ type: GET_NOVO_COMPRAS_FAIL, payload: response.sucesso });
 
     types.push(showToast({ text: response.mensagem }));
 

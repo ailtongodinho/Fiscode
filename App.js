@@ -1,6 +1,7 @@
 import React from "react";
 import { AppLoading } from "expo";
 import * as Font from 'expo-font';
+
 import { Ionicons } from '@expo/vector-icons';
 //  Navegação
 import Navigation from "./src/components/navigation";
@@ -9,11 +10,13 @@ import Navigation from "./src/components/navigation";
 import { Provider } from 'react-redux';
 import { store } from "./src/redux/reducers/index";
 import { Root } from "native-base";
-
+//  Moment
+import moment from "moment/min/moment-with-locales";
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    moment.locale(['pt-br', 'en'])
     this.state = {
       isReady: false,
     };

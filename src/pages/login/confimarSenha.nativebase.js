@@ -63,7 +63,8 @@ class ConfirmarSenha extends Component {
     }
     enviar = () => {
         var newPayload = {
-            login: this.state.usuario.registroNacional.value,
+            // login: this.state.usuario.registroNacional,
+            login: this.state.usuario.email,
             senha: this.state.payload[0].value
         }
 

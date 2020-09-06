@@ -11,22 +11,27 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ConfimarSenha from "../pages/login/confimarSenha.nativebase";
 import Registrar from "../pages/login/registrar.nativebase";
 import Login from "../pages/login/login.nativebase";
-import Listar from "../pages/home/listar.nativebase";
-import Detalhes from "../pages/home/detalhes.nativebase";
+//  Notas
+import Listar from "../pages/home/notas/listar.notas";
+import Detalhes from "../pages/home/notas/detalhes.notas";
 //  Compras
 import ListarCompras from "../pages/home/compras/listar.compras";
 import Compras from "../pages/home/compras/compras";
 import NovaCompra from "../pages/home/compras/novo.compras";
 import { Produto } from "../pages/home/compras/produto.compras";
+import PesquisaDetalhesCompras from "../pages/home/compras/pesquisa.detalhes.compras";
 import PesquisaCompras from "../pages/home/compras/pesquisa.compras";
 //  Emissores
-import ListarEmissores from "../pages/home/emissores/lista.emissores.nativebase";
+import ListarEmissores from "../pages/home/emissores/lista.emissores";
 //  FooterTabs
-import { Menu } from "../pages/home/menu.nativebase";
-import Leitor from "../pages/home/leitor.nativebase";
+import { Menu } from "../pages/home/menu";
+//  Leitor
+import Leitor from "../pages/home/leitor/leitor";
+import ConfirmarLeitor from "../pages/home/leitor/confirmar.leitor";
 //  Usuario
-import Usuario from "../pages/home/usuario/usuario.nativebase";
-import AlterarSenha from "../pages/home/usuario/alterarSenha.nativebase";
+import Usuario from "../pages/home/usuario/usuario";
+import AlterarUsuario from "../pages/home/usuario/alterar.usuario";
+import AlterarSenha from "../pages/home/usuario/senha.usuario";
 import autorizar  from "./autorizar"
 //  Components
 import { Loading } from "../components/loading";
@@ -129,6 +134,14 @@ const homeNavigator = (
             }}
         />
         <BottomTab.Screen
+            name="PesquisaDetalhesCompras"
+            component={PesquisaDetalhesCompras}
+            options={{
+                tabBarButton: () => null,
+                tabBarVisible: false,
+            }}
+        />
+        <BottomTab.Screen
             name="NovaCompra"
             component={NovaCompra}
             options={{
@@ -160,6 +173,7 @@ const homeNavigator = (
                 tabBarVisible: false,
             }}
         />
+        {/* Leitor */}
         <BottomTab.Screen
             name="Leitor"
             component={Leitor}
@@ -168,10 +182,27 @@ const homeNavigator = (
             }}
         />
         <BottomTab.Screen
+            name="ConfirmarLeitor"
+            component={ConfirmarLeitor}
+            options={{
+                tabBarButton: () => null,
+                tabBarVisible: false,
+            }}
+        />
+        {/* Usuario */}
+        <BottomTab.Screen
             name="Usuario"
             component={Usuario}
             options={{
                 tabBarIcon: (props) => <Icon name="person" style={{ color: props.color }} />
+            }}
+        />
+        <BottomTab.Screen
+            name="AlterarUsuario"
+            component={AlterarUsuario}
+            options={{
+                tabBarButton: () => null,
+                tabBarVisible: false,
             }}
         />
     </BottomTab.Navigator>

@@ -5,39 +5,66 @@ import { showToast } from "../globalReducer";
 
 export const GET_PRODUTO_COMPRAS = 'nfce/Compras/Produto/repos/LOAD';
 export const GET_PRODUTO_COMPRAS_RESET = 'nfce/Compras/Produto/repos/RESET';
+export const GET_PRODUTO_COMPRAS_RESET_LISTA = 'nfce/Compras/Produto/repos/RESET_LISTA';
 export const GET_PRODUTO_COMPRAS_SUCCESS = 'nfce/Compras/Produto/repos/LOAD_SUCCESS';
 export const GET_PRODUTO_COMPRAS_FAIL = 'nfce/Compras/Produto/repos/LOAD_FAIL';
+export const GET_PRODUTO_COMPRAS_SELECIONADO = 'nfce/Compras/Produto/repos/SELECIONADO';
 
-const defaultRepos = null;
+const defaultRepos = {
+    produtos: null,
+    produtoSelecionado: null,
+    sucesso: false,
+    loading: false
+};
 
 export function produtoComprasReducer(state = { repos: defaultRepos }, action) {
+    // console.log("produtoComprasReducer", action.type);
+
     switch (action.type) {
         case GET_PRODUTO_COMPRAS:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, loading: true } };
         case GET_PRODUTO_COMPRAS_SUCCESS:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, produtos: action.payload, loading: false, sucesso: true } };
         case GET_PRODUTO_COMPRAS_FAIL:
-            return { ...state, repos: action.payload };
+            return { ...state, repos: { ...state.repos, loading: false, sucesso: false } };
         case GET_PRODUTO_COMPRAS_RESET:
-            return { ...state, repos: [] }
+            return { ...state, repos: defaultRepos }
+        case GET_PRODUTO_COMPRAS_RESET_LISTA:
+            return { ...state, repos: { ...state.repos, produtos: null } }
+        case GET_PRODUTO_COMPRAS_SELECIONADO:
+            return { ...state, repos: { ...state.repos, produtoSelecionado: action.payload } };
         default:
             return state;
     }
 }
 
-export function produtoComprasReset(payload) {
+export function produtoSelecionar(payload) {
+    return { type: GET_PRODUTO_COMPRAS_SELECIONADO, payload: payload }
+}
+
+export function produtoComprasReset() {
     return { type: GET_PRODUTO_COMPRAS_RESET }
 }
 
+export function produtoComprasResetLista() {
+    return { type: GET_PRODUTO_COMPRAS_RESET_LISTA }
+}
+
 export function produtoComprasRepos(payload) {
-    console.log("****************Compras/ProdutoRepos****************", payload);
+    // console.log("****************Compras/ProdutoRepos****************", payload);
 
     return (dispatch, getState) => {
+
+        const novoPayload = {
+            ...payload,
+            idCompra: getState().listarComprasReducer.repos.selecionada.id
+        }
+
         var options = new FetchApiOptions(
             GET_PRODUTO_COMPRAS,
-            '/Produto/Listar',
+            '/ComprasProduto/ListarProdutos',
             'POST',
-            payload,
+            novoPayload,
             new Headers({
                 "Authorization": "Bearer " + getState().loginReducer.repos.objeto?.accessToken
             })
@@ -76,7 +103,7 @@ function produtoComprasReposError(response: ResponseModel) {
 }
 
 export function produtoComprasDeletar(id) {
-    console.log("****************Compras/ProdutoDeletar****************", id);
+    // console.log("****************Compras/ProdutoDeletar****************", id);
 
     return (dispatch, getState) => {
         var options = new FetchApiOptions(
@@ -113,7 +140,7 @@ function produtoComprasDeletarError(response: ResponseModel) {
 
     var types = [];
 
-    // types.push({ type: GET_PRODUTO_COMPRAS_FAIL, payload: response });
+    types.push({ type: GET_PRODUTO_COMPRAS_FAIL, payload: response });
 
     types.push(showToast({ text: response.mensagem }));
 

@@ -1,7 +1,7 @@
 import { fetchApi } from "../../fetchs/index";
 import { FetchApiOptions } from "../../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../../models/api/ResponseModel";
-import { showMessage, showToast } from "../globalReducer";
+import { showToast } from "../globalReducer";
 import { extracaoModel, extracaoItemModel } from "../../../models/api/ExtracaoModel";
 import { removerNotaRepos, listarNotasRepos } from "./notaListarReducer";
 
@@ -28,7 +28,7 @@ export function deletarNotaReducer(state = { repos: defaultRepos }, action) {
 }
 
 export function deletarNotaRepos(idNota: number) {
-    console.log("****************DeletarNotaRepos****************", idNota);
+    // console.log("****************DeletarNotaRepos****************", idNota);
 
     return (dispatch, getState) => {
         var options = new FetchApiOptions(
@@ -73,7 +73,7 @@ function deletarNotaReposError(response: ResponseModel) {
 
     types.push({ type: GET_DELETAR_NOTAS_FAIL, payload: response });
 
-    types.push(showMessage(response.mensagem));
+    types.push(showToast({ text: response.mensagem }));
 
     return types;
 }

@@ -54,9 +54,10 @@ class Login extends Component {
         this.setState({ lembrar: lembrar });
     }
     escreverLogin = (text) => {
-        var mask = maskCpfCnpj(text);
+        // var mask = maskCpfCnpj(text);
         this.setState({
-            payload: { ...this.state.payload, login: { ...this.state.payload.login, error: !mask.isValid, masked: mask.masked, value: mask.raw } }
+            // payload: { ...this.state.payload, login: { ...this.state.payload.login, error: !mask.isValid, masked: mask.masked, value: mask.raw } }
+            payload: { ...this.state.payload, login: { ...this.state.payload.login, error: false, value: text } }
         })
     }
     escreverSenha = (text) => {
@@ -131,13 +132,15 @@ class Login extends Component {
                                     style={[styles.textBoxPadding]}
                                     error={this.state.payload.login.error}
                                 >
-                                    <Label style={styles.textBoxStyle}>CPF/CNPJ</Label>
+                                    {/* <Label style={styles.textBoxStyle}>CPF/CNPJ</Label> */}
+                                    <Label style={styles.textBoxStyle}>Email</Label>
                                     <Input
                                         style={styles.textBoxStyle}
-                                        keyboardType={"numeric"}
+                                        // keyboardType={"numeric"}
                                         textContentType='username'
                                         onChangeText={(text) => this.escreverLogin(text)}
-                                        value={this.state.payload.login.masked}
+                                        // value={this.state.payload.login.masked}
+                                        value={this.state.payload.login.value}
                                     ></Input>
                                 </Item>
                                 <Item

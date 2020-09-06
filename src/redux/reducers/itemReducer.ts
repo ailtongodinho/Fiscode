@@ -1,27 +1,34 @@
 import { fetchApi } from "../fetchs/index";
 import { FetchApiOptions } from "../../models/redux/FetchApiOptionsModel";
 import { ResponseModel } from "../../models/api/ResponseModel";
-import { showMessage } from "../reducers/globalReducer";
+import { showToast } from "../reducers/globalReducer";
 import { extracaoItemModel } from "../../models/api/ExtracaoModel";
 
 const GET_ITEM = 'nfce/item/repos/LOAD';
+const GET_ITEM_SUCCESS = 'nfce/item/repos/LOAD_SUCCESS';
+const GET_ITEM_ERROR = 'nfce/item/repos/LOAD_ERROR';
 const SET_ITEM_FAVORITAR = 'nfce/item/repos/SET_FAVORITAR';
 const SET_ITEM_FAVORITAR_SUCCESS = 'nfce/item/repos/SET_FAVORITAR_SUCCESS';
 const SET_ITEM_FAVORITAR_ERROR = 'nfce/item/repos/SET_FAVORITAR_ERROR';
 
-const defaultRepos = []
+const defaultRepos = {
+    lista: null,
+    sucesso: false
+}
 
 export function itemReducer(state = { repos: defaultRepos }, action) {
     // console.log("AQUI SÃO OS ACTIONS (ITEM): ", action);
     switch (action.type) {
-        case GET_ITEM:
-            return { ...state };
-        case SET_ITEM_FAVORITAR:
-            return { ...state, repos: action }
         case SET_ITEM_FAVORITAR_SUCCESS:
-            return { ...state, repos: action }
+            return { ...state, repos: { ...state.repos, sucesso: action.payload } }
         case SET_ITEM_FAVORITAR_ERROR:
-            return { ...state, repos: action }
+            return { ...state, repos: { ...state.repos, sucesso: action.payload } }
+        case GET_ITEM_SUCCESS:
+            return { ...state, repos: { ...state.repos, lista: action.payload, sucesso: true } }
+        case GET_ITEM_ERROR:
+            return { ...state, repos: { ...state.repos, lista: action.payload, sucesso: false } }
+        default:
+            return state;
     }
 }
 
@@ -57,6 +64,6 @@ function itemFavoritarSuccess(response: ResponseModel) {
 function itemFavoritarError(response: ResponseModel) {
     var types = [];
     types.push({ type: SET_ITEM_FAVORITAR_ERROR, payload: response });
-    types.push(showMessage(response.mensagem));
+    types.push(showToast({ text: response.mensagem }));
     return types;
 }

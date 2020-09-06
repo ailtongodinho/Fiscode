@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Button, Icon, Text, Item, List, ListItem, Body, Card, CardItem, Badge, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, Tabs, ScrollableTab, Tab, TabHeading, ActionSheet } from "native-base";
+import { Button, Icon, Text, Item, List, ListItem, Body, Card, CardItem, Label, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, Tabs, ScrollableTab, Tab, TabHeading, ActionSheet } from "native-base";
 import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import { money } from "../../../components/mask";
 import Background from "../../../components/backgroud";
@@ -8,9 +8,13 @@ import { listaVazia } from "../../../components/listaVazia";
 import { DateTime } from "../../../helpers/datetime";
 import { ModalView } from "../../../components/modal";
 import { produtoCompraPayload } from "../../../models/payloads/produtoCompraPayload";
+import { SelecionarUnidade } from "./selecionarUnidade.compras";
+import ItensCompras from "./itens.compras";
+import MercadosCompras from "./mercados.compras";
+
 //  Redux
 import { connect } from "react-redux";
-import { comprasRepos, adicionarCompra } from "../../../redux/reducers/compras/comprasReducer";
+import { comprasReset, comprasRepos, adicionarCompra, removerCompra, atualizarCompra } from "../../../redux/reducers/compras/comprasReducer";
 import { listarComprasRepos, listarComprasDeletar } from "../../../redux/reducers/compras/listar.comprasReducer";
 
 const lerProps = (props) => {
@@ -21,7 +25,9 @@ const lerProps = (props) => {
         compra: compra,
         // data: compra != null ? props.comprasRepos({ idCompra: compra.id }) : null,
         data: compra != null ? props.comprasRepos() : null,
-        confirmarDeletarCompra: false
+        confirmarDeletarCompra: false,
+        mostrarDetalhesProduto: false,
+        itemSelecionado: null
     }
 }
 
@@ -29,65 +35,6 @@ class Compras extends Component {
     constructor(props) {
         super(props);
         this.state = lerProps(this.props)
-    }
-    criarItem = (item) => {
-        const produto = {
-            unidade: item.produto?.unidade ?? item.unidade,
-            nome: (item.produto?.apelido ?? item.produto?.nome) ?? item.apelido,
-            valor: item.produto != null ? money(item.produto?.valorUnitario ?? 0).masked : "--"
-        }
-        const key = item.id
-        return (
-            <Card
-                key={key + "_CARD"}
-                noShadow
-            >
-                <CardItem
-                    key={key + "_CARD_BODY"}
-                    cardBody
-                >
-                    <View key={key + "_CARD_BODY_UN"}
-                        style={[styles.center, styles.startRadius
-                            , { /*backgroundColor: "#3F51B5",*/ padding: 12 }
-                            , { borderRightWidth: 0.5, borderColor: "#CCC" }
-                        ]}>
-                        {/* <Text style={[comprasStyle.fonte, { padding: 2 }]}>{money(item.quantidade).masked}</Text> */}
-                        <Text style={[comprasStyle.fonte, { padding: 2 }]}>{item.quantidade}</Text>
-                        <Text style={[comprasStyle.fonte, { padding: 2, borderTopWidth: 0.5, borderColor: "black" }]}>{produto.unidade}</Text>
-                    </View>
-                    <Left key={key + "_CARD_BODY_LEFT"} style={[{ backgroundColor: "transparent" }]}>
-                        {/* <View style={[styles.center, { backgroundColor: "transparent" }]}> */}
-                        {/* <Button style={[styles.startRadius, styles.endRadius]}> */}
-                        {/* </Button> */}
-                        {/* </View> */}
-
-                        <Body key={key + "_CARD_BODY_LEFT_BODY"} style={[styles.leftCenter, { backgroundColor: "transparent" }]}>
-                            <Text uppercase={true} style={[comprasStyle.fonte]}>{produto.nome}</Text>
-                            <Text note>{produto.valor}</Text>
-                            {/* <View style={[styles.center, styles.row, { backgroundColor: "transparent" }]}>
-                                            <Text note>KG</Text>
-                                        </View> */}
-                            {/* <Text note>{item.produto.codigo}</Text> */}
-                        </Body>
-                    </Left>
-                    <Right key={key + "_CARD_BODY_RIGHT"}>
-                        <View key={key + "_CARD_BODY_RIGHT_VIEW"} style={[styles.center, styles.row, { backgroundColor: "transparent" }]}>
-                            <Button small danger transparent onPress={() => this._adicionarProduto(item.id, -item.quantidade)}>
-                                <Icon name="trash" />
-                            </Button>
-                            {/* <Button small dark transparent onPress={() => this._adicionarProduto(item.id, -1)}>
-                            </Button> */}
-                            <Button small vertical
-                                style={[{ margin: 10 }]}
-                                onPress={() => this._adicionarProduto(item.id, 1)}>
-                                {/* <Icon style={{ fontSize: 12 }} name="add" />
-                                <Icon style={{ fontSize: 12 }} name="remove" /> */}
-                            </Button>
-                        </View>
-                    </Right>
-                </CardItem>
-            </Card>
-        )
     }
     componentDidUpdate() {
         console.log("componentDidUpdate", new Date());
@@ -105,50 +52,23 @@ class Compras extends Component {
         this.props.navigation.navigate("PesquisaCompras")
     }
     _exit = () => {
+        this.props.comprasReset()
         this.props.navigation.goBack()
-    }
-    _adicionarProduto = (id, qtd, un = "UN") => {
-        var payload = new produtoCompraPayload();
-        payload.idCompra = this.props.compraSelecionada.id;
-        payload.id = id;
-        payload.quantidade = qtd;
-        payload.unidade = un;
-        this.props.adicionarCompra(payload);
-    }
-    comprasItens = () => {
-        var obj = [];
-        console.log(this.props.compras);
-
-        if (this.props.compras !== null && this.props.compras !== undefined && this.props.compras.length > 0) {
-            this.props.compras.forEach((item) => {
-                obj.push(this.criarItem(item))
-            })
-        }
-        else {
-            obj.push(listaVazia(
-                'Adicione alguns itens a lista!',
-                <Button transparent rounded bordered onPress={() => this.props.comprasRepos()}><Icon name="refresh" /></Button>
-            ))
-        }
-        return obj;
     }
     _mostrarMais = () => {
         ActionSheet.show({
             options: [
-                { text: "Novo Produto", icon: "add", iconColor: "blue" },
+
                 { text: "Deletar", icon: "trash", iconColor: "red" },
                 { text: "Cancelar", icon: "close", iconColor: "green" }
             ],
-            cancelButtonIndex: 2,
-            destructiveButtonIndex: 1,
+            cancelButtonIndex: 1,
+            destructiveButtonIndex: 0,
             title: "Opções"
         }, index => {
             console.log("ActionSheet", index);
             switch (index) {
                 case 0:
-                    this._navegarPesquisa()
-                    break;
-                case 1:
                     this.setState({ confirmarDeletarCompra: true })
                     break;
                 default:
@@ -164,12 +84,6 @@ class Compras extends Component {
         });
     }
     render() {
-
-        if (1 == 0) {
-            return listaVazia('Sem Dados')
-        }
-
-        const key = "a"
 
         return (
             <Background
@@ -198,30 +112,47 @@ class Compras extends Component {
                         <Icon name="more" style={{ color: "#000" }} />
                     </Button>
                 </Header>
-                <Content
+                {/* <Content
                     // style={{ maxHeight: "80%" }}
                     padder
                 >
                     {this.comprasItens()}
-                </Content>
-                <Footer style={[
+                </Content> */}
+                <Tabs
+                    initialPage={0}
+                    tabBarUnderlineStyle={{ backgroundColor: pallet[0] }}
+                    tabBarPosition={"bottom"}
+                    locked
+                // renderTabBar={() => <ScrollableTab />}
+                >
+                    <Tab
+                        heading={
+                            <TabHeading style={[styles.center, { backgroundColor: "#FFF" }]}>
+                                <Text style={{ color: "#000" }}>Produtos</Text>
+                            </TabHeading>
+                        }
+                    >
+                        <ItensCompras navigate={(name) => this.props.navigation.navigate(name)}/>
+                    </Tab>
+                    <Tab
+                        heading={
+                            <TabHeading style={[styles.center, { backgroundColor: "#FFF" }]}>
+                                <Text style={{ color: "#000" }}>Comparação</Text>
+                            </TabHeading>
+                        }
+                    >
+                        <MercadosCompras />
+                    </Tab>
+                </Tabs>
+                {/* <Footer style={[
                     { backgroundColor: "transparent" },
                     { borderTopWidth: 0.5, borderTopColor: "lightgray", elevation: 0.3 },
                 ]}
                 >
-                    {/* <Left> */}
-                    <Body style={[styles.center]}>
-                        <Button full onPress={this._navegarPesquisa}>
-                            <Text uppercase={false}>Adicionar Item</Text>
-                        </Button>
-                        {/* <Input
-                            style={{ textAlign: "center" }}
-                            placeholder={"Adicionar item"}
-                        /> */}
-                    </Body>
-                    {/* </Left> */}
-
-                </Footer>
+                    <Button style={[styles.full, styles.center]} onPress={this._navegarPesquisa}>
+                        <Text uppercase={false}>Adicionar Item</Text>
+                    </Button>
+                </Footer> */}
 
                 <ModalView
                     key="1"
@@ -234,12 +165,13 @@ class Compras extends Component {
                     width={"80%"}
                     height={"30%"}
                     onConfirm={() => this._deletarCompra()}
-                    onCancel={() => this.setState({ confirmarDeletar: false })}
+                    onCancel={() => this.setState({ confirmarDeletarCompra: false })}
                 >
                     <View style={[styles.center, { padding: 20 }]}>
                         <Text>Realmente deseja deletar a lista de compra <Text style={{ fontWeight: "bold" }}>{this.state.compra.nome}</Text>?</Text>
                     </View>
                 </ModalView>
+
             </Background >
         );
     }
@@ -264,8 +196,8 @@ const comprasStyle = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        compras: state.comprasReducer.repos,
-        compraSelecionada: state.listarComprasReducer.hasOwnProperty("selecionada") ? state.listarComprasReducer.selecionada : null
+        compras: state.comprasReducer.repos.compras,
+        compraSelecionada: state.listarComprasReducer.repos.selecionada
     };
 };
 
@@ -273,7 +205,10 @@ const mapDispatchToProps = {
     comprasRepos,
     listarComprasRepos,
     listarComprasDeletar,
-    adicionarCompra
+    adicionarCompra,
+    comprasReset,
+    removerCompra,
+    atualizarCompra
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compras);
