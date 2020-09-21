@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Button, Icon, Text, List, ListItem, Body, Card, CardItem, Badge, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, SwipeRow } from "native-base";
+import { Button, Icon, Text, List, ListItem, Body, Card, CardItem, Badge, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, SwipeRow, Thumbnail } from "native-base";
 import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import { money } from "../../../components/mask";
 import { listaVazia } from "../../../components/listaVazia";
+import { Image } from "react-native";
+import { GetThumbnailProduto, getThumbnailProduto } from "../../../components/imagemProduto";
 
 export class Itens extends Component {
     constructor(props) {
@@ -23,6 +25,7 @@ export class Itens extends Component {
             >
                 {itens.map(item => {
                     var key = item.id + "_" + item.nome + "_" + item.quantidade + "_" + item.unidade + "_" + item.codigo;
+                    var ean = parseInt(item.ean);
                     return (
                         <Card
                             key={key + "_CARD"}
@@ -31,15 +34,18 @@ export class Itens extends Component {
                             <CardItem bordered
                                 key={key + "_CARD_HEADER"}
                             >
-                                <Body>
-                                    <Text>{item.nome}</Text>
-                                    <Text note>{item.codigo}</Text>
-                                </Body>
-                                <Right>
+                                <GetThumbnailProduto ean={item.ean} large />
+                                <Left>
+                                    <Body>
+                                        <Text>{item.nome}</Text>
+                                        <Text note>{!isNaN(ean) ? ean : "N/D"}</Text>
+                                    </Body>
                                     <Button small rounded>
                                         <Text>{money(item.valorTotal.toString()).masked}</Text>
                                     </Button>
-                                </Right>
+                                </Left>
+                                {/* <Right>
+                                </Right> */}
                             </CardItem>
                             <CardItem bordered
                                 key={key + "_CARD_BODY"}

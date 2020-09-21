@@ -50,7 +50,7 @@ export function comprasRepos() {
         
         var options = new FetchApiOptions(
             GET_COMPRAS,
-            '/ComprasProduto/Listar',
+            '/Compras/Produto/Listar',
             'POST',
             newPayload,
             new Headers({
@@ -103,7 +103,7 @@ export function adicionarCompra(payload: produtoCompraPayload) {
 
         var options = new FetchApiOptions(
             GET_COMPRAS,
-            '/ComprasProduto',
+            '/Compras/Produto',
             'POST',
             novoPayload,
             new Headers({
@@ -154,7 +154,7 @@ export function removerCompra(id) {
 
         var options = new FetchApiOptions(
             GET_COMPRAS_DELETE,
-            '/ComprasProduto/Deletar/' + id,
+            '/Compras/Produto/Deletar/' + id,
             'DELETE',
             null,
             new Headers({
@@ -204,7 +204,7 @@ export function atualizarCompra(payload) {
 
         var options = new FetchApiOptions(
             GET_COMPRAS_UPDATE,
-            '/ComprasProduto/Atualizar',
+            '/Compras/Produto/Atualizar',
             'POST',
             payload,
             new Headers({
@@ -236,7 +236,7 @@ function atualizarCompraSuccess(response: ResponseModel) {
 }
 
 function atualizarCompraError(response: ResponseModel) {
-    console.log("Compras/ProdutoReposError", response);
+    // console.log("Compras/ProdutoReposError", response);
 
     var types = [];
 

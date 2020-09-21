@@ -185,24 +185,28 @@ class Listar extends Component {
                                                 </Grid> */}
                                         </Row>
                                         <Row style={[{ padding: 0 }]}>
-                                            <Col
+                                            {/* <Col
                                                 key={item.chaveAcesso + item.id + "_COL_1_1"}
                                                 style={styles.center}
-                                            >
-                                                <Text note>Total</Text>
-                                                <Text
-                                                    style={[{ padding: 0, fontWeight: "bold", color: 'black' }]}
-                                                >{money(item.valorTotal).masked}</Text>
-                                            </Col>
+                                            > */}
+                                            <ScrollView horizontal>
+                                                <Button dark transparent small vertical>
+                                                    <Text note uppercase={false}>R$</Text>
+                                                    <Text
+                                                        style={[{ padding: 0, fontWeight: "bold", color: 'black' }]}
+                                                    >{money(item.valorTotal).masked}</Text>
+                                                </Button>
+                                                {/* </Col>
                                             <Col
                                                 key={item.chaveAcesso + item.id + "_COL_1_2"}
                                                 size={2}
                                                 style={styles.center}
-                                            >
-                                                <Text note>Hora</Text>
-                                                {/* <Text>{DateTime.formatDate(new Date(item.emissao), "dd/MM/yyyy HH:m:s")}</Text> */}
-                                                <Text>{moment(item.emissao).format("LT")}</Text>
-                                                {/* <TextInputMask
+                                            > */}
+                                                <Button dark transparent small vertical>
+                                                    <Text note uppercase={false}>Hora</Text>
+                                                    {/* <Text>{DateTime.formatDate(new Date(item.emissao), "dd/MM/yyyy HH:m:s")}</Text> */}
+                                                    <Text>{moment(item.emissao).format("LT")}</Text>
+                                                    {/* <TextInputMask
                                                         style={[{ padding: 0, color: 'black' }]}
                                                         type={"datetime"}
                                                         options={{
@@ -211,18 +215,22 @@ class Listar extends Component {
                                                         value={DateTime.formatDate(new Date(item.emissao), "dd-MM-yyyy HH:m:s")}
                                                         editable={false}
                                                     /> */}
-                                            </Col>
+                                                    {/* </Col>
                                             <Col
-                                                key={item.chaveAcesso + item.id + "_COL_1_3"}
-                                                style={styles.center}
-                                            >
-                                                <Text note>Itens</Text>
-                                                <Text>{item.quantidadeItens}</Text>
-                                            </Col>
+                                            key={item.chaveAcesso + item.id + "_COL_1_3"}
+                                            style={styles.center}
+                                        > */}
+                                                </Button>
+                                                <Button dark transparent small vertical>
+                                                    <Text note uppercase={false}>Itens</Text>
+                                                    <Text>{item.quantidadeItens}</Text>
+                                                    {/* </Col> */}
+                                                </Button>
+                                            </ScrollView>
                                         </Row>
                                     </Col>
 
-                                    <Col size={12}
+                                    <Col size={15}
                                         style={[styles.center]}
                                         key={item.chaveAcesso + item.id + "_COL_2"}
                                     >

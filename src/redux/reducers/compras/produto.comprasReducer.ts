@@ -62,7 +62,7 @@ export function produtoComprasRepos(payload) {
 
         var options = new FetchApiOptions(
             GET_PRODUTO_COMPRAS,
-            '/ComprasProduto/ListarProdutos',
+            '/Compras/Produto/ListarProdutos',
             'POST',
             novoPayload,
             new Headers({

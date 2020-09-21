@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Button, Icon, Text, Item, List, ListItem, Body, Card, CardItem, Label, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, Tabs, ScrollableTab, Tab, TabHeading, ActionSheet } from "native-base";
 import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import { money } from "../../../components/mask";
@@ -14,13 +14,15 @@ import { SelecionarUnidade } from "./selecionarUnidade.compras";
 import { connect } from "react-redux";
 import { comprasReset, comprasRepos, adicionarCompra, removerCompra, atualizarCompra } from "../../../redux/reducers/compras/comprasReducer";
 import { listarComprasRepos, listarComprasDeletar } from "../../../redux/reducers/compras/listar.comprasReducer";
+import { GetThumbnailProduto } from "../../../components/imagemProduto";
 
 class ItensCompras extends Component {
     constructor(props) {
         super(props);
         this.state = {
             mostrarDetalhesProduto: false,
-            itemSelecionado: null
+            itemSelecionado: null,
+            refreshing: false
         }
     }
     _navegarPesquisa = () => {
@@ -35,7 +37,8 @@ class ItensCompras extends Component {
             quantidade: item.quantidade,
             apelido: item.apelido,
             id: item.id,
-            idProduto: item.idProduto
+            idProduto: item.idProduto,
+            ean: item.produto.ean
         }
     }
     header = () => {
@@ -43,10 +46,7 @@ class ItensCompras extends Component {
             <Card
                 key={"ADD_CARD"}
                 style={{ marginBottom: 15 }}
-            // style={[
-            //     { marginBottom: 15 },
-            //     { borderBottomWidth: 0.5, borderColor: "#CCC" }
-            // ]}
+            // noShadow
             // transparent
             >
                 <TouchableOpacity onPress={this._navegarPesquisa}>
@@ -112,55 +112,101 @@ class ItensCompras extends Component {
             <Card
                 key={key + "_CARD"}
                 noShadow
+                style={[{ width: "45%" }]}
             >
                 <TouchableOpacity onPress={() => this.selecionarItem(item.id)}>
                     <CardItem
-                        key={key + "_CARD_BODY"}
-                        cardBody
-                        bordered
+                        key={key + "_CARD_BODY_2"}
+                        // cardBody
+                        // bordered
+                        style={[styles.center]}
                     >
-                        <View key={key + "_CARD_BODY_UN"}
-                            style={[styles.center, styles.startRadius
-                                , { /*backgroundColor: "#3F51B5",*/ padding: 15 }
-                                , { borderRightWidth: 0.5, borderColor: "#CCC" }
-                            ]}
-                        >
-                            {/* <Text style={[comprasStyle.fonte, { padding: 2 }]}>{money(item.quantidade).masked}</Text> */}
-                            <Text style={[comprasStyle.fonte, { padding: 2 }]}>{item.quantidade}</Text>
-                            <Text style={[comprasStyle.fonte, { padding: 2, borderTopWidth: 0.5, borderColor: "black" }]}>{produto.unidade}</Text>
-                        </View>
-                        <Left key={key + "_CARD_BODY_LEFT"} style={[{ backgroundColor: "transparent" }]}>
-                            {/* <View style={[styles.center, { backgroundColor: "transparent" }]}> */}
-                            {/* <Button style={[styles.startRadius, styles.endRadius]}> */}
-                            {/* </Button> */}
-                            {/* </View> */}
-
-                            <Body key={key + "_CARD_BODY_LEFT_BODY"} style={[styles.leftCenter, { backgroundColor: "transparent" }]}>
-                                <Text uppercase={true} style={[comprasStyle.fonte]}>{produto.nome}</Text>
+                        <GetThumbnailProduto key={key + "_Thumbnail"} ean={produto.ean} large />
+                    </CardItem>
+                    <CardItem cardBody bordered>
+                        <Button small>
+                            <Text>{produto.valor}</Text>
+                        </Button>
+                    </CardItem>
+                    <CardItem
+                        key={key + "_CARD_BODY"}
+                        // cardBody
+                        bordered
+                        style={[styles.center]}
+                    >
+                        <Left key={key + "_CARD_BODY_LEFT"}>
+                            <Body key={key + "_CARD_BODY_LEFT_BODY"}
+                            style={[styles.center]}
+                            // style={[styles.leftCenter, { backgroundColor: "transparent" }]}
+                            >
+                                {/* <Left>
                                 <Text note>{produto.valor}</Text>
+                            </Left> */}
+                                <Body>
+                                    <ScrollView horizontal>
+                                        <TextInput editable={false} style={[comprasStyle.fonte]} value={produto.nome} />
+                                    </ScrollView>
+                                </Body>
+                                <Right style={[styles.center]}>
+                                    <ScrollView horizontal>
+                                        <Button vertical small dark transparent>
+                                            <Text /*style={[comprasStyle.fonte, { padding: 2 }]}*/>{item.quantidade} | {produto.unidade}</Text>
+                                            {/* <Text style={[{ borderTopWidth: 0.5, borderColor: "black" }]}>{produto.unidade}</Text> */}
+                                        </Button>
+                                        {/* <Button vertical small dark transparent style={[styles.center]}>
+                                            <Text note>{produto.valor}</Text>
+                                        </Button> */}
+                                    </ScrollView>
+                                </Right>
                                 {/* <View style={[styles.center, styles.row, { backgroundColor: "transparent" }]}>
                                             <Text note>KG</Text>
                                         </View> */}
                                 {/* <Text note>{item.produto.codigo}</Text> */}
                             </Body>
                         </Left>
-                        <Right key={key + "_CARD_BODY_RIGHT"}>
-                            <View key={key + "_CARD_BODY_RIGHT_VIEW"} style={[{ margin: 10 }, styles.center, styles.row, { backgroundColor: "transparent" }]}>
-                                <Button small danger transparent onPress={() => this._removerProduto(item.id)}>
-                                    <Icon name="trash" />
-                                </Button>
-                                {/* <Button small dark transparent onPress={() => this._adicionarProduto(item.id, -1)}>
+                    </CardItem>
+                    {/* <CardItem> */}
+                    {/* <Left>
+                        <Button vertical small dark transparent>
+                        <Text style={[comprasStyle.fonte, { padding: 2 }]}>{item.quantidade}</Text>
+                        <Text style={[{ borderTopWidth: 0.5, borderColor: "black" }]}>{produto.unidade}</Text>
+                        </Button>
+                    </Left> */}
+                    {/* <View key={key + "_CARD_BODY_UN"}
+                            style={[styles.center
+                                // , styles.startRadius
+                                // , { backgroundColor: "#3F51B5", padding: 15 }
+                                , { borderRightWidth: 0.5, borderColor: "#CCC" }
+                            ]}
+                        > */}
+                    {/* <Text style={[comprasStyle.fonte, { padding: 2 }]}>{money(item.quantidade).masked}</Text> */}
+                    {/* </View> */}
+                    {/* <Right key={key + "_CARD_BODY_RIGHT"}> */}
+                    {/* <View key={key + "_CARD_BODY_RIGHT_VIEW"} 
+                                style={[
+                                    // { margin: 10 }, 
+                                    styles.center, 
+                                    // styles.row, { backgroundColor: "transparent" }
+                                ]}> */}
+                    {/* <Button small dark transparent onPress={() => this._adicionarProduto(item.id, -1)}>
                             </Button> */}
-                                {/* <Button small vertical
+                    {/* <Button small vertical
                                 style={[styles.startRadius, styles.endRadius]}
                                 onPress={() => this._adicionarProduto(item.id, 1)}>
                                 <Text>{produto.unidade}</Text>
                                 <Icon style={{ fontSize: 12 }} name="add" />
                                 <Icon style={{ fontSize: 12 }} name="remove" />
                             </Button> */}
-                            </View>
-                        </Right>
-                    </CardItem>
+                    {/* </View> */}
+                    {/* </Right> */}
+                    {/* </CardItem> */}
+                    {/* <CardItem cardBody>
+                    <Body>
+                    <Button info small full onPress={() => this.selecionarItem(item.id)} style={[styles.center]}>
+                    <Icon name="eye" />
+                    </Button>
+                    </Body>
+                </CardItem> */}
                 </TouchableOpacity>
             </Card>
         )
@@ -196,19 +242,19 @@ class ItensCompras extends Component {
     }
     comprasItens = () => {
         var obj = [];
-        console.log(this.props.compras);
+        // console.log(this.props.compras);
 
-        obj.push(this.header())
-        
+        // obj.push(this.header())
+
         var lista = this.props.compras?.dados;
-        
+
         if (lista !== null && lista !== undefined && lista.length > 0) {
             lista.forEach((item) => {
                 obj.push(this.criarItem(item))
             })
         }
-        
-        obj.push(this.footer())
+
+        // obj.push(this.footer())
 
         // else {
         //     obj.push(listaVazia(
@@ -218,6 +264,9 @@ class ItensCompras extends Component {
         // }
         return obj;
     }
+    refresh = () => {
+        this.props.comprasRepos()
+    }
     render() {
 
         const selecionado = this.formatarItem(this.state.itemSelecionado)
@@ -225,10 +274,14 @@ class ItensCompras extends Component {
         return (
             <>
                 <Content
-                    // style={{ maxHeight: "80%" }}
                     padder
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.refresh} />}
                 >
-                    {this.comprasItens()}
+                    {this.header()}
+                    <View style={[{ flexDirection: "row", flexWrap: "wrap" }, styles.center]}>
+                        {this.comprasItens()}
+                    </View>
+                    {this.footer()}
                 </Content>
                 <ModalView
                     key="detalhesProduto"
@@ -237,11 +290,11 @@ class ItensCompras extends Component {
                     // desfocar={false}
                     // padder={false}
                     // showHeader={false}
-                    center
+                    // center
                     // centerContent
                     // showCancel
                     // icon={<Icon name='document' />}
-                    width={"80%"}
+                    width={"100%"}
                     height={"60%"}
                     onConfirm={() => this._atualizarProduto()}
                     onCancel={() => this.setState({ mostrarDetalhesProduto: false })}
@@ -286,7 +339,12 @@ class ItensCompras extends Component {
                                 >
                                     <Icon name="add" />
                                 </Button>
+                                <Button danger onPress={() => this._removerProduto(this.state.itemSelecionado.id)}>
+                                    <Icon name="trash" />
+                                </Button>
                             </Item>
+                            {/* <ListItem>
+                            </ListItem> */}
                             {/* <ListItem noBorder style={[styles.center]}>
                                 <Left>
                                     <Body style={[styles.center, { backgroundColor: "transparent" }]}>

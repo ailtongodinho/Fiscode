@@ -93,102 +93,103 @@ class ListarEmissores extends Component {
 
         if (this.props.emissores != null && this.props.emissores != undefined && this.props.emissores.length != 0) {
             // this.props.emissores.map(_uf => {
-                // obj.push(
-                //     <Card transparent
-                //         // style={[{ borderLeftWidth: 1, borderLeftColor: '#000' }]}
-                //         key={key + "_CARD_HEADER"}
-                //     >
-                //         <CardItem
-                //             key={key + "_CARD_HEADER_ITEM"}
-                //         >
-                //             <Left>
-                //                 <Body>
-                //                     <Text uppercase>{_uf.uf}</Text>
-                //                 </Body>
-                //             </Left>
-                //         </CardItem>
-                //     </Card>
-                // )
-                obj.push(
-                    <Accordion
-                        dataArray={this.props.emissores}
-                        style={[{ border: 0 }]}
-                        expanded={0}
-                        renderHeader={(item, expanded) => {
-                            return (
-                                <Card
-                                    style={[styles.center]}
-                                    noShadow
+            // obj.push(
+            //     <Card transparent
+            //         // style={[{ borderLeftWidth: 1, borderLeftColor: '#000' }]}
+            //         key={key + "_CARD_HEADER"}
+            //     >
+            //         <CardItem
+            //             key={key + "_CARD_HEADER_ITEM"}
+            //         >
+            //             <Left>
+            //                 <Body>
+            //                     <Text uppercase>{_uf.uf}</Text>
+            //                 </Body>
+            //             </Left>
+            //         </CardItem>
+            //     </Card>
+            // )
+            obj.push(
+                <Accordion
+                    dataArray={this.props.emissores}
+                    style={[{ border: 0 }]}
+                    expanded={0}
+                    renderHeader={(item, expanded) => {
+                        return (
+                            <Card
+                                style={[styles.center]}
+                                noShadow
+                            >
+                                <CardItem>
+                                    <Left>
+                                        <Text>{item.uf}</Text>
+                                    </Left>
+                                    {expanded
+                                        ? <Icon name="remove" />
+                                        : <Icon name="add" />
+                                    }
+                                </CardItem>
+                            </Card>
+                        )
+                    }}
+                    renderContent={(_uf) => {
+                        var key = _uf.uf
+                        var content = []
+                        _uf.dados.map(_m => {
+                            key = _m.municipio
+                            content.push(
+                                <Card transparent
+                                    // style={[{ borderLeftWidth: 1, borderLeftColor: '#000' }]}
+                                    key={key + "_CARD_HEADER"}
+                                    style={{ paddingHorizontal: 15 }}
                                 >
-                                    <CardItem>
+                                    <CardItem
+                                        key={key + "_CARD_HEADER_ITEM"}
+                                    >
                                         <Left>
-                                            <Text>{item.uf}</Text>
+                                            <Body>
+                                                <Text>{_m.municipio}</Text>
+                                            </Body>
                                         </Left>
-                                        {expanded
-                                            ? <Icon name="remove" />
-                                            : <Icon name="add" />
-                                        }
                                     </CardItem>
                                 </Card>
                             )
-                        }}
-                        renderContent={(_uf) => {
-                            var key = _uf.uf
-                            var content = []
-                            _uf.dados.map(_m => {
-                                key = _m.municipio
+                            _m.dados.map(item => {
+                                key = _uf.uf + _m.municipio + item.cnpj + item.id
                                 content.push(
-                                    <Card transparent
-                                        // style={[{ borderLeftWidth: 1, borderLeftColor: '#000' }]}
-                                        key={key + "_CARD_HEADER"}
-                                        style={{ paddingHorizontal: 15 }}
+                                    // <TouchableOpacity
+                                    //     key={key + "_TouchableOpacity"}
+                                    //     onPress={() => this.selectItem(item.id)}
+                                    // >
+                                    <Card
+                                        noShadow
+                                        key={key + "_CARD"}
                                     >
                                         <CardItem
-                                            key={key + "_CARD_HEADER_ITEM"}
+                                            style={{ borderRadius: 10 }}
+                                            // bordered
+                                            key={key + "_HEADER"}
                                         >
-                                            <Left>
-                                                <Body>
-                                                    <Text>{_m.municipio}</Text>
-                                                </Body>
-                                            </Left>
-                                        </CardItem>
-                                    </Card>
-                                )
-                                _m.dados.map(item => {
-                                    key = _uf.uf + _m.municipio + item.cnpj + item.id
-                                    content.push(
-                                        // <TouchableOpacity
-                                        //     key={key + "_TouchableOpacity"}
-                                        //     onPress={() => this.selectItem(item.id)}
-                                        // >
-                                        <Card
-                                            noShadow
-                                            key={key + "_CARD"}
-                                        >
-                                            <CardItem
-                                                style={{ borderRadius: 10 }}
-                                                // bordered
-                                                key={key + "_HEADER"}
+                                            <Grid
+                                                key={key + "_GRID"}
                                             >
-                                                <Grid
-                                                    key={key + "_GRID"}
+                                                <Col
+                                                    key={key + "_COL_1"}
+                                                    size={95}
+                                                    style={[{ borderRightWidth: 1, borderRightColor: '#CCC' }]}
                                                 >
-                                                    <Col
-                                                        key={key + "_COL_1"}
-                                                        size={95}
-                                                        style={[{ borderRightWidth: 1, borderRightColor: '#CCC' }]}
-                                                    >
-                                                        <Row key={key + "_ROW_1"}>
-                                                            <Left>
-                                                                <Body>
-                                                                    <ScrollView horizontal>
-                                                                        <TextInput editable={false} value={(item.nomeFantasia ?? item.razaoSocial)} />
-                                                                    </ScrollView>
-                                                                </Body>
-                                                            </Left>
-                                                        </Row>
-                                                        <Row key={key + "_ROW_2"}>
-                                                            <Left>
+                                                    <Row key={key + "_ROW_1"}>
+                                                        <Left>
+                                                            <Body>
+                                                                <ScrollView horizontal>
+                                                                    <TextInput editable={false} value={(item.nomeFantasia ?? item.razaoSocial)} />
+                                                                </ScrollView>
+                                                            </Body>
+                                                        </Left>
+                                                    </Row>
+                                                    <Row key={key + "_ROW_2"}>
+                                                        <Left>
+                                                            <ScrollView horizontal>
                                                                 <Button dark transparent small vertical>
                                                                     <Text note uppercase={false}>R$</Text>
                                                                     <Text>{money(item.somatoriaTotal, { unit: "" }).masked}</Text>
@@ -201,114 +202,115 @@ class ListarEmissores extends Component {
                                                                     <Text note uppercase={false}>Tributos</Text>
                                                                     <Text>{money(item.somatoriaTributos).masked}</Text>
                                                                 </Button>
-                                                            </Left>
-                                                            {/* <Text note>{item.cnpj}</Text> */}
-                                                        </Row>
-                                                    </Col>
-                                                    <Col
-                                                        key={key + "_COL_2"}
-                                                        size={12}
-                                                        style={[styles.center]}
-                                                    >
-                                                        <Button info onPress={() => this.selectItem(item.id)} small vertical iconLeft transparent>
-                                                            <Icon name="list-box" />
-                                                        </Button>
-                                                    </Col>
-                                                </Grid>
-                                            </CardItem>
-                                        </Card>
-                                    )
-                                })
+                                                            </ScrollView>
+                                                        </Left>
+                                                        {/* <Text note>{item.cnpj}</Text> */}
+                                                    </Row>
+                                                </Col>
+                                                <Col
+                                                    key={key + "_COL_2"}
+                                                    size={12}
+                                                    style={[styles.center]}
+                                                >
+                                                    <Button info onPress={() => this.selectItem(item.id)} small vertical iconLeft transparent>
+                                                        <Icon name="list-box" />
+                                                    </Button>
+                                                </Col>
+                                            </Grid>
+                                        </CardItem>
+                                    </Card>
+                                )
                             })
-                            return content;
-                        }}
-                    />
-                )
-                // _uf.dados.map(_m => {
-                //     key = _m.municipio
-                //     obj.push(
-                //         <Card transparent
-                //             // style={[{ borderLeftWidth: 1, borderLeftColor: '#000' }]}
-                //             key={key + "_CARD_HEADER"}
-                //         // style={{ padding: 5 }}
-                //         >
-                //             <CardItem
-                //                 key={key + "_CARD_HEADER_ITEM"}
-                //             >
-                //                 <Left>
-                //                     <Body>
-                //                         <Text>{_m.municipio}, {_uf.uf}</Text>
-                //                     </Body>
-                //                 </Left>
-                //             </CardItem>
-                //         </Card>
-                //     )
-                //     _m.dados.map(item => {
-                //         key = _uf.uf + _m.municipio + item.cnpj + item.id
-                //         obj.push(
-                //             // <TouchableOpacity
-                //             //     key={key + "_TouchableOpacity"}
-                //             //     onPress={() => this.selectItem(item.id)}
-                //             // >
-                //             <Card
-                //                 noShadow
-                //                 key={key + "_CARD"}
-                //             >
-                //                 <CardItem
-                //                     style={{ borderRadius: 10 }}
-                //                     // bordered
-                //                     key={key + "_HEADER"}
-                //                 >
-                //                     <Grid
-                //                         key={key + "_GRID"}
-                //                     >
-                //                         <Col
-                //                             key={key + "_COL_1"}
-                //                             size={95}
-                //                             style={[{ borderRightWidth: 1, borderRightColor: '#CCC' }]}
-                //                         >
-                //                             <Row key={key + "_ROW_1"}>
-                //                                 <Left>
-                //                                     <Body>
-                //                                         <ScrollView horizontal>
-                //                                             <TextInput editable={false} value={(item.nomeFantasia ?? item.razaoSocial)} />
-                //                                         </ScrollView>
-                //                                     </Body>
-                //                                 </Left>
-                //                             </Row>
-                //                             <Row key={key + "_ROW_2"}>
-                //                                 <Left>
-                //                                     <Button dark transparent small vertical>
-                //                                         <Text note uppercase={false}>R$</Text>
-                //                                         <Text>{money(item.somatoriaTotal, { unit: "" }).masked}</Text>
-                //                                     </Button>
-                //                                     <Button dark transparent small vertical>
-                //                                         <Text note uppercase={false}>Notas</Text>
-                //                                         <Text>{item.quantidadeNotas}</Text>
-                //                                     </Button>
-                //                                     <Button dark transparent small vertical>
-                //                                         <Text note uppercase={false}>Tributos</Text>
-                //                                         <Text>{money(item.somatoriaTributos).masked}</Text>
-                //                                     </Button>
-                //                                 </Left>
-                //                                 {/* <Text note>{item.cnpj}</Text> */}
-                //                             </Row>
-                //                         </Col>
-                //                         <Col
-                //                             key={key + "_COL_2"}
-                //                             size={12}
-                //                             style={[styles.center]}
-                //                         >
-                //                             <Button info onPress={() => this.selectItem(item.id)} small vertical iconLeft transparent>
-                //                                 <Icon name="eye" />
-                //                             </Button>
-                //                         </Col>
-                //                     </Grid>
-                //                 </CardItem>
-                //             </Card>
-                //         )
-                //     })
-                // })
+                        })
+                        return content;
+                    }}
+                />
+            )
+            // _uf.dados.map(_m => {
+            //     key = _m.municipio
+            //     obj.push(
+            //         <Card transparent
+            //             // style={[{ borderLeftWidth: 1, borderLeftColor: '#000' }]}
+            //             key={key + "_CARD_HEADER"}
+            //         // style={{ padding: 5 }}
+            //         >
+            //             <CardItem
+            //                 key={key + "_CARD_HEADER_ITEM"}
+            //             >
+            //                 <Left>
+            //                     <Body>
+            //                         <Text>{_m.municipio}, {_uf.uf}</Text>
+            //                     </Body>
+            //                 </Left>
+            //             </CardItem>
+            //         </Card>
+            //     )
+            //     _m.dados.map(item => {
+            //         key = _uf.uf + _m.municipio + item.cnpj + item.id
+            //         obj.push(
+            //             // <TouchableOpacity
+            //             //     key={key + "_TouchableOpacity"}
+            //             //     onPress={() => this.selectItem(item.id)}
+            //             // >
+            //             <Card
+            //                 noShadow
+            //                 key={key + "_CARD"}
+            //             >
+            //                 <CardItem
+            //                     style={{ borderRadius: 10 }}
+            //                     // bordered
+            //                     key={key + "_HEADER"}
+            //                 >
+            //                     <Grid
+            //                         key={key + "_GRID"}
+            //                     >
+            //                         <Col
+            //                             key={key + "_COL_1"}
+            //                             size={95}
+            //                             style={[{ borderRightWidth: 1, borderRightColor: '#CCC' }]}
+            //                         >
+            //                             <Row key={key + "_ROW_1"}>
+            //                                 <Left>
+            //                                     <Body>
+            //                                         <ScrollView horizontal>
+            //                                             <TextInput editable={false} value={(item.nomeFantasia ?? item.razaoSocial)} />
+            //                                         </ScrollView>
+            //                                     </Body>
+            //                                 </Left>
+            //                             </Row>
+            //                             <Row key={key + "_ROW_2"}>
+            //                                 <Left>
+            //                                     <Button dark transparent small vertical>
+            //                                         <Text note uppercase={false}>R$</Text>
+            //                                         <Text>{money(item.somatoriaTotal, { unit: "" }).masked}</Text>
+            //                                     </Button>
+            //                                     <Button dark transparent small vertical>
+            //                                         <Text note uppercase={false}>Notas</Text>
+            //                                         <Text>{item.quantidadeNotas}</Text>
+            //                                     </Button>
+            //                                     <Button dark transparent small vertical>
+            //                                         <Text note uppercase={false}>Tributos</Text>
+            //                                         <Text>{money(item.somatoriaTributos).masked}</Text>
+            //                                     </Button>
+            //                                 </Left>
+            //                                 {/* <Text note>{item.cnpj}</Text> */}
+            //                             </Row>
+            //                         </Col>
+            //                         <Col
+            //                             key={key + "_COL_2"}
+            //                             size={12}
+            //                             style={[styles.center]}
+            //                         >
+            //                             <Button info onPress={() => this.selectItem(item.id)} small vertical iconLeft transparent>
+            //                                 <Icon name="eye" />
+            //                             </Button>
+            //                         </Col>
+            //                     </Grid>
+            //                 </CardItem>
+            //             </Card>
+            //         )
+            //     })
+            // })
             // })
         }
         else {

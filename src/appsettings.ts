@@ -43,5 +43,8 @@ export const appsettings = {
         baseURL: "https://servicodados.ibge.gov.br/api/v1",
         headers: new Headers(),
         defaultNetworkErrorResponse: new ResponseModel(false, 505, "Ops... Não conseguimos conexão com o site do IBGE! Tente novamente mais tarde", new Date(Date.now()), null)
+    },
+    cosmos: {
+        thumbnail: "https://cdn-cosmos.bluesoft.com.br/products/{ean}",
     }
 }

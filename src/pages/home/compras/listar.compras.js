@@ -40,9 +40,9 @@ class ListarCompras extends Component {
                 const key = item.id;
                 obj.push(
                     <ListItem key={key + "_LISTITEM"} onPress={() => this._navegarCompras(item.id)}>
-                        <Left>
+                        <Left key={key + "_LEFT"}>
                             {/* <Text style={listarStyle.numeracao}>{item.id}</Text> */}
-                            <Body>
+                            <Body key={key + "_BODY"}>
                                 <Text>{item.nome}</Text>
                                 <Text note>{DateTime.formatDate(new Date(item.dataCriacao), 'dd/MM/yyyy HH:mm:ss')}</Text>
                             </Body>
@@ -51,7 +51,7 @@ class ListarCompras extends Component {
                                 <Text note>{item.municipio}, {item.uf}</Text>
                             : null}
                         </Left>
-                    </ListItem >
+                    </ListItem>
                 )
             })
         }

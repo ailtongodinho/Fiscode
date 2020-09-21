@@ -157,5 +157,8 @@ export const styles = StyleSheet.create({
     },
     containerHeight: {
         maxHeight: windowHeight - (footerHeight)
+    },
+    float: {
+        position: 'absolute'
     }
 })
