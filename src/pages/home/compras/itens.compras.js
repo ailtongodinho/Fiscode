@@ -28,6 +28,9 @@ class ItensCompras extends Component {
     _navegarPesquisa = () => {
         this.props.navigate("PesquisaCompras")
     }
+    _navegarComparar = () => {
+        this.props.navigate("CompararCompras")
+    }
     formatarItem = (item) => {
         if (item == null) return;
         return {
@@ -61,10 +64,29 @@ class ItensCompras extends Component {
                                 , { borderRightWidth: 0.5, borderColor: "#CCC" }
                             ]}
                         >
-                            <Icon name="add" style={[{ padding: 2 }]} />
+                            <Icon name="add" style={{ width: 20 }}/>
                         </View>
                         <Left>
                             <Text uppercase={true} style={[comprasStyle.fonte]}>Adicionar Produtos</Text>
+                        </Left>
+                    </CardItem>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this._navegarComparar}>
+                    <CardItem
+                        key={"ADD_CARD_BODY"}
+                        cardBody
+                        bordered
+                    >
+                        <View key={"ADD_CARD_BODY_UN"}
+                            style={[styles.center, styles.startRadius
+                                , { /*backgroundColor: "#3F51B5",*/ padding: 15 }
+                                , { borderRightWidth: 0.5, borderColor: "#CCC" }
+                            ]}
+                        >
+                            <Icon name="repeat" style={{ width: 20 }}/>
+                        </View>
+                        <Left>
+                            <Text uppercase={true} style={[comprasStyle.fonte]}>Comparar</Text>
                         </Left>
                     </CardItem>
                 </TouchableOpacity>

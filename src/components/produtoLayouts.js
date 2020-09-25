@@ -8,20 +8,20 @@ import { styles } from "../styles/layouts/layouts.styles";
 import { GetThumbnailProduto } from "./imagemProduto";
 import { TouchableOpacity } from "react-native";
 
-export const criarProdutoPesquisa = (item, selecionado, funcaoSelecionar) => {
+export const criarProdutoPesquisa = (produto, selecionado, funcaoSelecionar, saldos) => {
 
     // console.log("ITEMMMMMMMM", item);
 
-    const key = item.id.toString();
-    const produto = {
-        id: item.id,
-        customizado: appsettings.produto.customizado.id == item.id,
-        nome: item.apelido ?? item.nome,
-        valorUnitario: money(item.saldo?.valorUnitario).masked,
-        dataSaldos: item.dataSaldos != null ? DateTime.formatDate(new Date(item.dataSaldos), 'dd/MM/yyyy') + " | " : "",
-        unidade: item.unidade,
-        selecionar: funcaoSelecionar != null ? () => funcaoSelecionar(item) : () => console.log("Selecionado"),
-        ean: item.ean
+    const key = produto.id.toString();
+    const _produto = {
+        id: produto.id,
+        customizado: appsettings.produto.customizado.id == produto.id,
+        nome: produto.apelido ?? produto.nome,
+        valorUnitario: money((produto.saldo?.valorUnitario ?? saldos?.valorUnitario)).masked,
+        dataSaldos: produto.dataSaldos != null ? DateTime.formatDate(new Date(produto.dataSaldos), 'dd/MM/yyyy') + " | " : "",
+        unidade: produto.unidade,
+        selecionar: funcaoSelecionar != null ? () => funcaoSelecionar(produto) : () => console.log("Selecionado"),
+        ean: produto.ean
     }
     return (
         // <ListItem key={key + "_LISTITEM"}
@@ -42,13 +42,13 @@ export const criarProdutoPesquisa = (item, selecionado, funcaoSelecionar) => {
         //     </View>
         // </ListItem>
         <Card key={key + "_CARD"}>
-            <TouchableOpacity key={key + "_Touchable"} onPress={produto.selecionar}>
+            <TouchableOpacity key={key + "_Touchable"} onPress={_produto.selecionar}>
                 <CardItem key={key + "_CardItem"} onPress>
                     <Left key={key + "_Left"} style={[styles.center]}>
-                        <GetThumbnailProduto key={key + "_Thumbnail"} ean={produto.ean} large />
+                        <GetThumbnailProduto key={key + "_Thumbnail"} ean={_produto.ean} large />
                         <Body key={key + "_Body"}>
-                            <Text note>{produto.dataSaldos}{produto.valorUnitario}</Text>
-                            <Text uppercase={true} >{produto.nome}</Text>
+                            <Text note>{_produto.dataSaldos}{_produto.valorUnitario}</Text>
+                            <Text uppercase={true} >{_produto.nome}</Text>
                         </Body>
                         <Icon key={key + "_Icon"} name={selecionado ? "radio-button-on" : "radio-button-off"} style={{ color: "gray", fontSize: 15 }} />
                     </Left>

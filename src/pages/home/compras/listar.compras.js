@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { RefreshControl, StyleSheet } from "react-native";
 import { Button, Icon, Text, List, ListItem, Body, Card, CardItem, Badge, Right, Footer, View, Content, Container, FooterTab, Title, Header, Left, DatePicker, Grid, Row, Col, Input, Tabs, ScrollableTab, Tab, TabHeading, ActionSheet } from "native-base";
 import { styles, pallet } from "../../../styles/layouts/layouts.styles";
 import Background from "../../../components/backgroud";
@@ -14,7 +14,7 @@ class ListarCompras extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            refreshing: false
         }
     }
     componentDidMount() {
@@ -24,6 +24,9 @@ class ListarCompras extends Component {
     }
     _exit = () => {
         this.props.navigation.goBack()
+    }
+    refresh = () => {
+        this.props.listarComprasRepos();
     }
     _navegarCompras = (idCompra) => {
         this.props.selecionarLista(this.props.compras.filter(x => x.id == idCompra)[0]);
@@ -88,6 +91,7 @@ class ListarCompras extends Component {
                 </Header>
                 <Content
                     padder
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.refresh} />}
                 >
                     <List>
                         {this._itens()}

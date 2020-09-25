@@ -10,16 +10,20 @@ import { ModalView } from "../../../components/modal";
 import { produtoCompraPayload } from "../../../models/payloads/produtoCompraPayload";
 import { SelecionarUnidade } from "./selecionarUnidade.compras";
 import ItensCompras from "./itens.compras";
-import MercadosCompras from "./mercados.compras";
+import CompararCompras from "./comparar.compras";
 
 //  Redux
 import { connect } from "react-redux";
 import { comprasReset, comprasRepos, adicionarCompra, removerCompra, atualizarCompra } from "../../../redux/reducers/compras/comprasReducer";
 import { listarComprasRepos, listarComprasDeletar } from "../../../redux/reducers/compras/listar.comprasReducer";
+import { compararComprasRepos } from "../../../redux/reducers/compras/comparar.comprasReducer"
 
 const lerProps = (props) => {
     var compra = props.compraSelecionada;
     // console.log("lerProps", compra);
+
+    //  Mercados
+    props.compararComprasRepos();
 
     return {
         compra: compra,
@@ -42,7 +46,7 @@ class Compras extends Component {
         if (this.state.compra !== this.props.compraSelecionada) {
             console.log("Carregando...");
 
-            this.setState(lerProps(this.props))
+            this.setState(lerProps(this.props));
         }
     }
     _navegarProduto = () => {
@@ -132,17 +136,17 @@ class Compras extends Component {
                             </TabHeading>
                         }
                     >
-                        <ItensCompras navigate={(name) => this.props.navigation.navigate(name)}/>
+                        <ItensCompras navigate={(name) => this.props.navigation.navigate(name)} />
                     </Tab>
-                    <Tab
+                    {/* <Tab
                         heading={
                             <TabHeading style={[styles.center, { backgroundColor: "#FFF" }]}>
                                 <Text style={{ color: "#000" }}>Comparação</Text>
                             </TabHeading>
                         }
                     >
-                        <MercadosCompras />
-                    </Tab>
+                        <CompararCompras />
+                    </Tab> */}
                 </Tabs>
                 {/* <Footer style={[
                     { backgroundColor: "transparent" },
@@ -208,7 +212,8 @@ const mapDispatchToProps = {
     adicionarCompra,
     comprasReset,
     removerCompra,
-    atualizarCompra
+    atualizarCompra,
+    compararComprasRepos
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compras);

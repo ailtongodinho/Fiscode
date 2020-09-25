@@ -21,6 +21,7 @@ import NovaCompra from "../pages/home/compras/novo.compras";
 import { Produto } from "../pages/home/compras/produto.compras";
 import PesquisaDetalhesCompras from "../pages/home/compras/pesquisa.detalhes.compras";
 import PesquisaCompras from "../pages/home/compras/pesquisa.compras";
+import CompararCompras from "../pages/home/compras/comparar.compras";
 //  Emissores
 import ListarEmissores from "../pages/home/emissores/lista.emissores";
 //  FooterTabs
@@ -168,6 +169,14 @@ const homeNavigator = (
         <BottomTab.Screen
             name="ListarCompras"
             component={ListarCompras}
+            options={{
+                tabBarButton: () => null,
+                tabBarVisible: false,
+            }}
+        />
+        <BottomTab.Screen
+            name="CompararCompras"
+            component={CompararCompras}
             options={{
                 tabBarButton: () => null,
                 tabBarVisible: false,

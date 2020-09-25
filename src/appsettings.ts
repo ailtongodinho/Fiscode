@@ -31,7 +31,7 @@ export const appsettings = {
         ]
     },
     api: {
-        // baseURL: "http://192.168.0.6:5001",
+        // baseURL: "http://192.168.0.112:5001",
         baseURL: "https://nfceapi.herokuapp.com",
         headers: new Headers({
             "Content-Type": 'application/json',

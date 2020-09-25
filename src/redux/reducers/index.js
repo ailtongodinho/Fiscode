@@ -24,6 +24,7 @@ import { listarComprasReducer } from "./compras/listar.comprasReducer";
 import { novoComprasReducer } from "./compras/novo.comprasReducer";
 import { comprasReducer } from "./compras/comprasReducer";
 import { produtoComprasReducer } from "./compras/produto.comprasReducer";
+import { compararComprasReducer } from "./compras/comparar.comprasReducer";
 //  IBGE
 import { ufIbgeReducer } from "./ibge/uf.ibge";
 import { municipioIbgeReducer } from "./ibge/municipio.ibge";
@@ -54,7 +55,8 @@ const reducerCombined = combineReducers({
     municipioIbgeReducer,
     localidadeEstadosReducer,
     localidadeDistritosReducer,
-    localidadeMunicipiosReducer
+    localidadeMunicipiosReducer,
+    compararComprasReducer
 });
 
 const middlewares = [thunk];
